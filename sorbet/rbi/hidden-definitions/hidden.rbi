@@ -3107,6 +3107,9 @@ module ActiveRecord::AttributeMethods::TimeZoneConversion::ClassMethods
   extend ::T::Sig
 end
 
+class ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
+end
+
 module ActiveRecord::AttributeMethods::TimeZoneConversion
   extend ::T::Sig
 end
@@ -3406,6 +3409,9 @@ end
 
 module ActiveRecord::LegacyYamlAdapter
   extend ::T::Sig
+end
+
+class ActiveRecord::Locking::LockingType
 end
 
 module ActiveRecord::Locking::Optimistic
@@ -4030,7 +4036,13 @@ module ActiveRecord::Type::Internal
   extend ::T::Sig
 end
 
+class ActiveRecord::Type::Serialized
+end
+
 ActiveRecord::Type::String = ActiveModel::Type::String
+
+class ActiveRecord::Type::Time::Value
+end
 
 ActiveRecord::Type::Value = ActiveModel::Type::Value
 
@@ -5218,6 +5230,10 @@ class Bundler::Env
   def self.report(options=T.unsafe(nil)); end
 
   def self.write(io); end
+end
+
+class Bundler::FeatureFlag
+  def github_https?(); end
 end
 
 class Bundler::Fetcher
@@ -8686,6 +8702,9 @@ class Gem::Exception
   extend ::Gem::Deprecate
 end
 
+module Gem::Ext
+end
+
 class Gem::Ext::BuildError
 end
 
@@ -8696,8 +8715,33 @@ class Gem::Ext::Builder
   include ::Gem::UserInteraction
   include ::Gem::DefaultUserInteraction
   include ::Gem::Text
+  def build_args(); end
+
+  def build_args=(build_args); end
+
+  def build_error(build_dir, output, backtrace=T.unsafe(nil)); end
+
+  def build_extension(extension, dest_path); end
+
+  def build_extensions(); end
+
+  def builder_for(extension); end
+
+  def initialize(spec, build_args=T.unsafe(nil)); end
+
+  def write_gem_make_out(output); end
   CHDIR_MONITOR = ::T.let(nil, ::T.untyped)
   CHDIR_MUTEX = ::T.let(nil, ::T.untyped)
+end
+
+class Gem::Ext::Builder
+  def self.class_name(); end
+
+  def self.make(dest_path, results); end
+
+  def self.redirector(); end
+
+  def self.run(command, results, command_name=T.unsafe(nil)); end
 end
 
 class Gem::Ext::CmakeBuilder
@@ -15084,6 +15128,9 @@ module Mail::Parsers
   extend ::T::Sig
 end
 
+class Mail::PartsList
+end
+
 class Mail::PhraseList
   def initialize(string); end
 
@@ -15694,17 +15741,13 @@ class Net::HTTPBadResponse
   extend ::T::Sig
 end
 
+Net::HTTPClientError::EXCEPTION_TYPE = Net::HTTPServerException
+
 class Net::HTTPClientError
   extend ::T::Sig
 end
 
-class Net::HTTPClientError
-end
-
-Net::HTTPClientErrorCode::EXCEPTION_TYPE = Net::HTTPServerException
-
-class Net::HTTPClientError
-end
+Net::HTTPClientErrorCode = Net::HTTPClientError
 
 class Net::HTTPConflict
   extend ::T::Sig
@@ -15888,17 +15931,13 @@ class Net::HTTPProxyAuthenticationRequired
   extend ::T::Sig
 end
 
+Net::HTTPRedirection::EXCEPTION_TYPE = Net::HTTPRetriableError
+
 class Net::HTTPRedirection
   extend ::T::Sig
 end
 
-class Net::HTTPRedirection
-end
-
-Net::HTTPRedirectionCode::EXCEPTION_TYPE = Net::HTTPRetriableError
-
-class Net::HTTPRedirection
-end
+Net::HTTPRedirectionCode = Net::HTTPRedirection
 
 class Net::HTTPRequest
   extend ::T::Sig
@@ -15958,17 +15997,13 @@ class Net::HTTPSeeOther
   extend ::T::Sig
 end
 
+Net::HTTPServerError::EXCEPTION_TYPE = Net::HTTPFatalError
+
 class Net::HTTPServerError
   extend ::T::Sig
 end
 
-class Net::HTTPServerError
-end
-
-Net::HTTPServerErrorCode::EXCEPTION_TYPE = Net::HTTPFatalError
-
-class Net::HTTPServerError
-end
+Net::HTTPServerErrorCode = Net::HTTPServerError
 
 class Net::HTTPServerException
   extend ::T::Sig
@@ -15988,17 +16023,13 @@ Net::HTTPSession::ProxyMod = Net::HTTP::ProxyDelta
 class Net::HTTP
 end
 
+Net::HTTPSuccess::EXCEPTION_TYPE = Net::HTTPError
+
 class Net::HTTPSuccess
   extend ::T::Sig
 end
 
-class Net::HTTPSuccess
-end
-
-Net::HTTPSuccessCode::EXCEPTION_TYPE = Net::HTTPError
-
-class Net::HTTPSuccess
-end
+Net::HTTPSuccessCode = Net::HTTPSuccess
 
 class Net::HTTPSwitchProtocol
   extend ::T::Sig
