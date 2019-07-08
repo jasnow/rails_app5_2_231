@@ -15422,6 +15422,10 @@ module MiniMime
   VERSION = ::T.let(nil, ::T.untyped)
 end
 
+module MiniMime::Configuration
+  extend ::T::Sig
+end
+
 class MiniMime::Db
   LOCK = ::T.let(nil, ::T.untyped)
 end
