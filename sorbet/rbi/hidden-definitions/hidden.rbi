@@ -15428,21 +15428,7 @@ module MiniMime
   extend ::T::Sig
 end
 
-module Minitest
-end
-
-MiniTest::Assertions = Minitest::Assertions
-
-MiniTest::Guard = Minitest::Guard
-
-MiniTest::Reportable = Minitest::Reportable
-
-MiniTest::Runnable = Minitest::Runnable
-
-MiniTest::Test = Minitest::Test
-
-module Minitest
-end
+MiniTest = Minitest
 
 module Minitest
   ENCS = ::T.let(nil, ::T.untyped)
@@ -22752,6 +22738,14 @@ module Sorbet::Private
 end
 
 class Sorbet
+  extend ::T::Sig
+end
+
+module SorbetRails::CustomFinderMethods
+  extend ::T::Sig
+end
+
+module SorbetRails
   extend ::T::Sig
 end
 
