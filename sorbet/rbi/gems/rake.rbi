@@ -224,7 +224,6 @@ class Rake::FileList
   def sort_by(*args, &block); end
   def sub!(pat, rep); end
   def sub(pat, rep); end
-  def sum(*args, &block); end
   def take(*args, &block); end
   def take_while(*args, &block); end
   def third(*args, &block); end

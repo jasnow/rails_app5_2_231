@@ -39,6 +39,7 @@ class Array
 end
 class Regexp
   def as_json(options = nil); end
+  def match?(string, pos = nil); end
   def multiline?; end
 end
 class Hash
@@ -47,6 +48,8 @@ class Hash
   def as_json(options = nil); end
   def assert_valid_keys(*valid_keys); end
   def blank?; end
+  def compact!; end
+  def compact; end
   def deep_dup; end
   def deep_merge!(other_hash, &block); end
   def deep_merge(other_hash, &block); end
@@ -79,6 +82,8 @@ class Hash
   def to_xml(options = nil); end
   def transform_keys!; end
   def transform_keys; end
+  def transform_values!; end
+  def transform_values; end
   def with_defaults!(other_hash); end
   def with_defaults(other_hash); end
   def with_indifferent_access; end
@@ -483,6 +488,7 @@ end
 class NilClass
   def as_json(options = nil); end
   def blank?; end
+  def duplicable?; end
   def to_param; end
   def try!(*args); end
   def try(*args); end
@@ -490,11 +496,13 @@ end
 class FalseClass
   def as_json(options = nil); end
   def blank?; end
+  def duplicable?; end
   def to_param; end
 end
 class TrueClass
   def as_json(options = nil); end
   def blank?; end
+  def duplicable?; end
   def to_param; end
 end
 class String
@@ -552,6 +560,7 @@ class Numeric
   def bytes; end
   def day; end
   def days; end
+  def duplicable?; end
   def exabyte; end
   def exabytes; end
   def fortnight; end
@@ -1195,6 +1204,7 @@ class ActiveSupport::FileUpdateChecker
 end
 class Symbol
   def as_json(options = nil); end
+  def duplicable?; end
 end
 class BigDecimal < Numeric
   def as_json(options = nil); end
@@ -1249,12 +1259,12 @@ class Float < Numeric
   def as_json(options = nil); end
 end
 module Enumerable
-  def _original_sum_with_required_identity(*arg0); end
   def as_json(options = nil); end
   def exclude?(object); end
   def index_by; end
   def many?; end
   def pluck(*keys); end
+  def sum(identity = nil, &block); end
   def without(*elements); end
 end
 class IO
@@ -1650,7 +1660,7 @@ class ActiveSupport::SafeBuffer < String
   def lstrip(*args, &block); end
   def next!(*args); end
   def next(*args, &block); end
-  def original_concat(*arg0); end
+  def original_concat(arg0); end
   def prepend(value); end
   def reverse!(*args); end
   def reverse(*args, &block); end
@@ -1944,8 +1954,8 @@ module Benchmark
   def self.ms; end
 end
 class File < IO
-  def self.empty?(arg0); end
   def self.size(arg0); end
+  def self.split(arg0); end
 end
 module Module::Concerning
   def concern(topic, &module_definition); end

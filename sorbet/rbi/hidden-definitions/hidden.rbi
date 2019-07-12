@@ -5041,7 +5041,7 @@ class Array
 
   def flatten!(*_); end
 
-  def pack(*_); end
+  def pack(_); end
 
   def replace(_); end
 
@@ -5155,6 +5155,7 @@ class BigDecimal
   def to_d(); end
 
   def to_digits(); end
+
   EXCEPTION_NaN = ::T.let(nil, ::T.untyped)
   SIGN_NaN = ::T.let(nil, ::T.untyped)
 end
@@ -5170,10 +5171,6 @@ end
 
 class Binding
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def clone(); end
-
-  def irb(); end
-
   def local_variable_defined?(_); end
 
   def local_variable_get(_); end
@@ -5380,30 +5377,6 @@ class Bundler::Fetcher
   def self.redirect_limit(); end
 
   def self.redirect_limit=(redirect_limit); end
-end
-
-module Bundler::FileUtils::DryRun
-  extend ::T::Sig
-end
-
-module Bundler::FileUtils::LowMethods
-  extend ::T::Sig
-end
-
-module Bundler::FileUtils::NoWrite
-  extend ::T::Sig
-end
-
-module Bundler::FileUtils::StreamUtils_
-  extend ::T::Sig
-end
-
-module Bundler::FileUtils::Verbose
-  extend ::T::Sig
-end
-
-module Bundler::FileUtils
-  extend ::T::Sig
 end
 
 class Bundler::GemHelper
@@ -6607,12 +6580,11 @@ class Delegator
 end
 
 class DidYouMean::ClassNameChecker
+  include ::DidYouMean::SpellCheckable
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
   def class_name(); end
 
   def class_names(); end
-
-  def corrections(); end
 
   def initialize(exception); end
 
@@ -6664,9 +6636,8 @@ module DidYouMean::Levenshtein
 end
 
 class DidYouMean::MethodNameChecker
+  include ::DidYouMean::SpellCheckable
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def corrections(); end
-
   def initialize(exception); end
 
   def method_name(); end
@@ -6698,21 +6669,19 @@ class DidYouMean::NullChecker
   extend ::T::Sig
 end
 
-class DidYouMean::SpellChecker
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def correct(input); end
+module DidYouMean::SpellCheckable
+  def candidates(); end
 
-  def initialize(dictionary:); end
+  def corrections(); end
 end
 
-class DidYouMean::SpellChecker
+module DidYouMean::SpellCheckable
   extend ::T::Sig
 end
 
 class DidYouMean::VariableNameChecker
+  include ::DidYouMean::SpellCheckable
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def corrections(); end
-
   def cvar_names(); end
 
   def initialize(exception); end
@@ -6799,8 +6768,6 @@ end
 
 class Dir
   extend ::T::Sig
-  def self.empty?(_); end
-
   def self.exists?(_); end
 
   def self.tmpdir(); end
@@ -6879,8 +6846,6 @@ end
 class ERB
   extend ::T::Sig
 end
-
-Emitter = Psych::Stream::Emitter
 
 class Encoding
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
@@ -6995,11 +6960,7 @@ module Enumerable
 
   def slice_when(); end
 
-  def sum(identity=T.unsafe(nil), &block); end
-
   def to_set(klass=T.unsafe(nil), *args, &block); end
-
-  def uniq(); end
 
   def zip(*_); end
 end
@@ -7027,8 +6988,6 @@ end
 
 class Enumerator::Lazy
   def chunk(*_); end
-
-  def chunk_while(*_); end
 
   def force(*_); end
 
@@ -7740,8 +7699,6 @@ module FileTest
 
   def self.directory?(_); end
 
-  def self.empty?(_); end
-
   def self.executable?(_); end
 
   def self.executable_real?(_); end
@@ -7917,17 +7874,17 @@ end
 module FileUtils
   extend ::T::Sig
   extend ::FileUtils::StreamUtils_
-  def self.cd(dir, verbose: T.unsafe(nil), &block); end
+  def self.cd(dir, options=T.unsafe(nil), &block); end
 
-  def self.chdir(dir, verbose: T.unsafe(nil), &block); end
+  def self.chdir(dir, options=T.unsafe(nil), &block); end
 
-  def self.chmod(mode, list, noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.chmod(mode, list, options=T.unsafe(nil)); end
 
-  def self.chmod_R(mode, list, noop: T.unsafe(nil), verbose: T.unsafe(nil), force: T.unsafe(nil)); end
+  def self.chmod_R(mode, list, options=T.unsafe(nil)); end
 
-  def self.chown(user, group, list, noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.chown(user, group, list, options=T.unsafe(nil)); end
 
-  def self.chown_R(user, group, list, noop: T.unsafe(nil), verbose: T.unsafe(nil), force: T.unsafe(nil)); end
+  def self.chown_R(user, group, list, options=T.unsafe(nil)); end
 
   def self.cmp(a, b); end
 
@@ -7939,7 +7896,7 @@ module FileUtils
 
   def self.compare_stream(a, b); end
 
-  def self.copy(src, dest, preserve: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.copy(src, dest, options=T.unsafe(nil)); end
 
   def self.copy_entry(src, dest, preserve=T.unsafe(nil), dereference_root=T.unsafe(nil), remove_destination=T.unsafe(nil)); end
 
@@ -7947,7 +7904,7 @@ module FileUtils
 
   def self.copy_stream(src, dest); end
 
-  def self.cp(src, dest, preserve: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.cp(src, dest, options=T.unsafe(nil)); end
 
   def self.getwd(); end
 
@@ -7955,25 +7912,25 @@ module FileUtils
 
   def self.identical?(a, b); end
 
-  def self.install(src, dest, mode: T.unsafe(nil), owner: T.unsafe(nil), group: T.unsafe(nil), preserve: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.install(src, dest, options=T.unsafe(nil)); end
 
-  def self.link(src, dest, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.link(src, dest, options=T.unsafe(nil)); end
 
-  def self.ln(src, dest, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.ln(src, dest, options=T.unsafe(nil)); end
 
-  def self.ln_s(src, dest, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.ln_s(src, dest, options=T.unsafe(nil)); end
 
-  def self.ln_sf(src, dest, noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.ln_sf(src, dest, options=T.unsafe(nil)); end
 
-  def self.makedirs(list, mode: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.makedirs(list, options=T.unsafe(nil)); end
 
-  def self.mkdir(list, mode: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.mkdir(list, options=T.unsafe(nil)); end
 
-  def self.mkpath(list, mode: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.mkpath(list, options=T.unsafe(nil)); end
 
-  def self.move(src, dest, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil), secure: T.unsafe(nil)); end
+  def self.move(src, dest, options=T.unsafe(nil)); end
 
-  def self.mv(src, dest, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil), secure: T.unsafe(nil)); end
+  def self.mv(src, dest, options=T.unsafe(nil)); end
 
   def self.options(); end
 
@@ -7983,7 +7940,7 @@ module FileUtils
 
   def self.pwd(); end
 
-  def self.remove(list, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.remove(list, options=T.unsafe(nil)); end
 
   def self.remove_dir(path, force=T.unsafe(nil)); end
 
@@ -7993,19 +7950,19 @@ module FileUtils
 
   def self.remove_file(path, force=T.unsafe(nil)); end
 
-  def self.rm(list, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.rm(list, options=T.unsafe(nil)); end
 
-  def self.rm_f(list, noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.rm_f(list, options=T.unsafe(nil)); end
 
-  def self.rm_rf(list, noop: T.unsafe(nil), verbose: T.unsafe(nil), secure: T.unsafe(nil)); end
+  def self.rm_rf(list, options=T.unsafe(nil)); end
 
-  def self.rmdir(list, parents: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.rmdir(list, options=T.unsafe(nil)); end
 
-  def self.rmtree(list, noop: T.unsafe(nil), verbose: T.unsafe(nil), secure: T.unsafe(nil)); end
+  def self.rmtree(list, options=T.unsafe(nil)); end
 
-  def self.safe_unlink(list, noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.safe_unlink(list, options=T.unsafe(nil)); end
 
-  def self.symlink(src, dest, force: T.unsafe(nil), noop: T.unsafe(nil), verbose: T.unsafe(nil)); end
+  def self.symlink(src, dest, options=T.unsafe(nil)); end
 
   def self.uptodate?(new, old_list); end
 end
@@ -8037,16 +7994,11 @@ module Forwardable
   def delegate(hash); end
 
   def instance_delegate(hash); end
+  FILE_REGEXP = ::T.let(nil, ::T.untyped)
 end
 
 module Forwardable
   extend ::T::Sig
-  def self._compile_method(src, file, line); end
-
-  def self._delegator_method(obj, accessor, method, ali); end
-
-  def self._valid_method?(method); end
-
   def self.debug(); end
 
   def self.debug=(debug); end
@@ -12200,10 +12152,6 @@ class Hash
 
   def >=(_); end
 
-  def compact(); end
-
-  def compact!(); end
-
   def default_proc(); end
 
   def default_proc=(default_proc); end
@@ -12223,10 +12171,6 @@ class Hash
   def to_h(); end
 
   def to_proc(); end
-
-  def transform_values(); end
-
-  def transform_values!(); end
 
   def update(_); end
 end
@@ -13222,8 +13166,6 @@ class IRB::Irb
 
   def prompt(prompt, ltype, indent, line_no); end
 
-  def run(conf=T.unsafe(nil)); end
-
   def scanner(); end
 
   def scanner=(scanner); end
@@ -13538,7 +13480,7 @@ module IRB
 
   def self.load_modules(); end
 
-  def self.parse_opts(argv: T.unsafe(nil)); end
+  def self.parse_opts(); end
 
   def self.rc_file(ext=T.unsafe(nil)); end
 
@@ -13546,7 +13488,7 @@ module IRB
 
   def self.run_config(); end
 
-  def self.setup(ap_path, argv: T.unsafe(nil)); end
+  def self.setup(ap_path); end
 
   def self.start(ap_path=T.unsafe(nil)); end
 
@@ -13558,15 +13500,10 @@ class IndexError
 end
 
 class Integer
-  include ::ActiveSupport::NumericWithFormat
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  include ::JSON::Ext::Generator::GeneratorMethods::Integer
-  def digits(*_); end
-
   def to_bn(); end
 
   def to_d(); end
-  GMP_VERSION = ::T.let(nil, ::T.untyped)
 end
 
 class Integer
@@ -13598,11 +13535,27 @@ module JSON::Ext::Generator::GeneratorMethods::Array
   extend ::T::Sig
 end
 
+module JSON::Ext::Generator::GeneratorMethods::Bignum
+  def to_json(*_); end
+end
+
+module JSON::Ext::Generator::GeneratorMethods::Bignum
+  extend ::T::Sig
+end
+
 module JSON::Ext::Generator::GeneratorMethods::FalseClass
   def to_json(*_); end
 end
 
 module JSON::Ext::Generator::GeneratorMethods::FalseClass
+  extend ::T::Sig
+end
+
+module JSON::Ext::Generator::GeneratorMethods::Fixnum
+  def to_json(*_); end
+end
+
+module JSON::Ext::Generator::GeneratorMethods::Fixnum
   extend ::T::Sig
 end
 
@@ -13619,14 +13572,6 @@ module JSON::Ext::Generator::GeneratorMethods::Hash
 end
 
 module JSON::Ext::Generator::GeneratorMethods::Hash
-  extend ::T::Sig
-end
-
-module JSON::Ext::Generator::GeneratorMethods::Integer
-  def to_json(*_); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::Integer
   extend ::T::Sig
 end
 
@@ -13713,6 +13658,12 @@ class JSON::Ext::Generator::State
 
   def object_nl=(object_nl); end
 
+  def quirks_mode(); end
+
+  def quirks_mode=(quirks_mode); end
+
+  def quirks_mode?(); end
+
   def space(); end
 
   def space=(space); end
@@ -13738,6 +13689,8 @@ class JSON::Ext::Parser
   def initialize(*_); end
 
   def parse(); end
+
+  def quirks_mode?(); end
 
   def source(); end
 end
@@ -13782,8 +13735,6 @@ JSON::UnparserError = JSON::GeneratorError
 module JSON
   extend ::T::Sig
 end
-
-JSONTree = Psych::Visitors::JSONTree
 
 module Kernel
   def gem(dep, *reqs); end
@@ -15283,12 +15234,10 @@ end
 module Marshal
   extend ::T::Sig
   extend ::ActiveSupport::MarshalWithAutoloading
-  def self.restore(*_); end
 end
 
 class MatchData
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def named_captures(); end
 end
 
 class MatchData
@@ -15308,8 +15257,6 @@ class Method
   def [](*_); end
 
   def arity(); end
-
-  def clone(); end
 
   def curry(*_); end
 
@@ -15414,21 +15361,7 @@ module MiniMime
   extend ::T::Sig
 end
 
-module Minitest
-end
-
-MiniTest::Assertions = Minitest::Assertions
-
-MiniTest::Guard = Minitest::Guard
-
-MiniTest::Reportable = Minitest::Reportable
-
-MiniTest::Runnable = Minitest::Runnable
-
-MiniTest::Test = Minitest::Test
-
-module Minitest
-end
+MiniTest = Minitest
 
 module Minitest
   ENCS = ::T.let(nil, ::T.untyped)
@@ -15507,7 +15440,6 @@ end
 
 class Module
   extend ::T::Sig
-  def self.used_modules(); end
 end
 
 class Monitor
@@ -15685,6 +15617,8 @@ module Net::HTTP::ProxyDelta
   extend ::T::Sig
 end
 
+Net::HTTP::ProxyMod = Net::HTTP::ProxyDelta
+
 class Net::HTTP::Put
   extend ::T::Sig
 end
@@ -15803,17 +15737,13 @@ class Net::HTTPIMUsed
   extend ::T::Sig
 end
 
+Net::HTTPInformation::EXCEPTION_TYPE = Net::HTTPError
+
 class Net::HTTPInformation
   extend ::T::Sig
 end
 
-class Net::HTTPInformation
-end
-
-Net::HTTPInformationCode::EXCEPTION_TYPE = Net::HTTPError
-
-class Net::HTTPInformation
-end
+Net::HTTPInformationCode = Net::HTTPInformation
 
 class Net::HTTPInsufficientStorage
   extend ::T::Sig
@@ -15989,15 +15919,7 @@ class Net::HTTPServiceUnavailable
   extend ::T::Sig
 end
 
-class Net::HTTP
-end
-
-Net::HTTPSession::ProxyDelta = Net::HTTP::ProxyDelta
-
-Net::HTTPSession::ProxyMod = Net::HTTP::ProxyDelta
-
-class Net::HTTP
-end
+Net::HTTPSession = Net::HTTP
 
 Net::HTTPSuccess::EXCEPTION_TYPE = Net::HTTPError
 
@@ -16020,10 +15942,6 @@ class Net::HTTPTooManyRequests
 end
 
 class Net::HTTPUnauthorized
-  extend ::T::Sig
-end
-
-class Net::HTTPUnavailableForLegalReasons
   extend ::T::Sig
 end
 
@@ -16512,6 +16430,10 @@ class Net::ReadTimeout
   extend ::T::Sig
 end
 
+class Net::SMTP
+  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
+end
+
 class Net::SMTP::Response
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
 end
@@ -16584,8 +16506,6 @@ end
 class NoMethodError
   include ::DidYouMean::Correctable
   def args(); end
-
-  def private_call?(); end
 end
 
 class NoMethodError
@@ -16917,10 +16837,6 @@ end
 
 class Numeric
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def finite?(); end
-
-  def infinite?(); end
-
   def negative?(); end
 
   def positive?(); end
@@ -17299,14 +17215,6 @@ class OpenSSL::OCSP::Response
   extend ::T::Sig
 end
 
-class OpenSSL::OCSP::SingleResponse
-  include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-end
-
-class OpenSSL::OCSP::SingleResponse
-  extend ::T::Sig
-end
-
 module OpenSSL::OCSP
   extend ::T::Sig
 end
@@ -17366,6 +17274,10 @@ class OpenSSL::PKCS7
 end
 
 class OpenSSL::PKey::DH
+  DEFAULT_512 = ::T.let(nil, ::T.untyped)
+end
+
+class OpenSSL::PKey::DH
   extend ::T::Sig
 end
 
@@ -17379,10 +17291,6 @@ end
 
 class OpenSSL::PKey::DSAError
   extend ::T::Sig
-end
-
-class OpenSSL::PKey::EC
-  EXPLICIT_CURVE = ::T.let(nil, ::T.untyped)
 end
 
 class OpenSSL::PKey::EC::Group
@@ -17451,11 +17359,6 @@ end
 
 module OpenSSL::SSL
   extend ::T::Sig
-end
-
-module OpenSSL::X509
-  V_FLAG_NO_CHECK_TIME = ::T.let(nil, ::T.untyped)
-  V_FLAG_TRUSTED_FIRST = ::T.let(nil, ::T.untyped)
 end
 
 class OpenSSL::X509::Attribute
@@ -17588,6 +17491,7 @@ end
 
 class OpenStruct
   extend ::T::Sig
+  def self.allocate(*_); end
 end
 
 OptParse = OptionParser
@@ -17647,17 +17551,17 @@ class OptionParser
 
   def on_tail(*opts, &block); end
 
-  def order(*argv, into: T.unsafe(nil), &nonopt); end
+  def order(*argv, &block); end
 
-  def order!(argv=T.unsafe(nil), into: T.unsafe(nil), &nonopt); end
+  def order!(argv=T.unsafe(nil), &nonopt); end
 
-  def parse(*argv, into: T.unsafe(nil)); end
+  def parse(*argv); end
 
-  def parse!(argv=T.unsafe(nil), into: T.unsafe(nil)); end
+  def parse!(argv=T.unsafe(nil)); end
 
-  def permute(*argv, into: T.unsafe(nil)); end
+  def permute(*argv); end
 
-  def permute!(argv=T.unsafe(nil), into: T.unsafe(nil)); end
+  def permute!(argv=T.unsafe(nil)); end
 
   def program_name(); end
 
@@ -17978,8 +17882,6 @@ ParseError = Racc::ParseError
 
 class Pathname
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def empty?(); end
-
   def fnmatch?(*_); end
 
   def make_symlink(_); end
@@ -18044,8 +17946,6 @@ class Proc
 
   def [](*_); end
 
-  def clone(); end
-
   def lambda?(); end
 
   def yield(*_); end
@@ -18053,12 +17953,6 @@ end
 
 class Proc
   extend ::T::Sig
-end
-
-module Process
-  CLOCK_MONOTONIC_RAW_APPROX = ::T.let(nil, ::T.untyped)
-  CLOCK_UPTIME_RAW = ::T.let(nil, ::T.untyped)
-  CLOCK_UPTIME_RAW_APPROX = ::T.let(nil, ::T.untyped)
 end
 
 module Process::GID
@@ -20692,6 +20586,7 @@ end
 
 class Rational
   def to_d(precision); end
+
 end
 
 class Rational
@@ -20770,10 +20665,6 @@ module Readline
 
   def self.pre_input_hook=(pre_input_hook); end
 
-  def self.quoting_detection_proc(); end
-
-  def self.quoting_detection_proc=(quoting_detection_proc); end
-
   def self.redisplay(); end
 
   def self.refresh_line(); end
@@ -20791,7 +20682,6 @@ end
 
 class Regexp
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def match?(*_); end
 end
 
 class Regexp
@@ -21789,6 +21679,12 @@ class RubyVM
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
 end
 
+class RubyVM::Env
+end
+
+class RubyVM::Env
+end
+
 class RubyVM::InstructionSequence
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
   def absolute_path(); end
@@ -21991,7 +21887,6 @@ end
 module SecureRandom
   extend ::Random::Formatter
   extend ::T::Sig
-  def self.bytes(n); end
 end
 
 class SecurityError
@@ -22001,10 +21896,6 @@ end
 class Set
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
   def ==(other); end
-
-  def compare_by_identity(); end
-
-  def compare_by_identity?(); end
 
   def divide(&func); end
 
@@ -22808,13 +22699,9 @@ class String
 
   def []=(*_); end
 
-  def casecmp?(_); end
-
   def encode(*_); end
 
   def encode!(*_); end
-
-  def match?(*_); end
 
   def reverse!(); end
 
@@ -22831,8 +22718,6 @@ class String
   def unicode_normalize!(form=T.unsafe(nil)); end
 
   def unicode_normalized?(form=T.unsafe(nil)); end
-
-  def unpack1(_); end
 
   BLANK_RE = ::T.let(nil, ::T.untyped)
   ENCODED_BLANKS = ::T.let(nil, ::T.untyped)
@@ -22985,10 +22870,6 @@ end
 
 class Symbol
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def casecmp?(_); end
-
-  def match?(*_); end
-
   def next(); end
 
 end
@@ -23387,10 +23268,6 @@ class Thread
 
   def priority=(priority); end
 
-  def report_on_exception(); end
-
-  def report_on_exception=(report_on_exception); end
-
   def run(); end
 
   def safe_level(); end
@@ -23412,6 +23289,7 @@ class Thread
   def value(); end
 
   def wakeup(); end
+  MUTEX_FOR_THREAD_EXCLUSIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Thread::Backtrace
@@ -23538,10 +23416,6 @@ class Thread
   def self.pass(); end
 
   def self.pending_interrupt?(*_); end
-
-  def self.report_on_exception(); end
-
-  def self.report_on_exception=(report_on_exception); end
 
   def self.start(*_); end
 
@@ -23956,7 +23830,7 @@ class URI::Generic
 
   def eql?(oth); end
 
-  def find_proxy(env=T.unsafe(nil)); end
+  def find_proxy(); end
 
   def fragment(); end
 
@@ -24220,8 +24094,6 @@ end
 
 class UnboundMethod
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
-  def clone(); end
-
   def original_name(); end
 end
 
@@ -24238,8 +24110,6 @@ end
 class UncaughtThrowError
   extend ::T::Sig
 end
-
-Visitor = Psych::Visitors::Visitor
 
 class WEBrick::HTTPServlet::AbstractServlet
   include ::ActiveSupport::ToJsonWithActiveSupportEncoder
@@ -24286,15 +24156,6 @@ class Wand
   def self.phoenix_feather(*args); end
 
   def self.unicorn_tail_hair(*args); end
-end
-
-module Warning
-  def warn(_); end
-end
-
-module Warning
-  extend ::T::Sig
-  extend ::Warning
 end
 
 class Wizard
@@ -24393,8 +24254,6 @@ class Wizard
 end
 
 YAML = Psych
-
-YAMLTree = Psych::Visitors::YAMLTree
 
 class ZeroDivisionError
   extend ::T::Sig
@@ -24711,10 +24570,6 @@ module Zlib
   def self.crc_table(); end
 
   def self.deflate(*_); end
-
-  def self.gunzip(_); end
-
-  def self.gzip(*_); end
 
   def self.inflate(_); end
 
